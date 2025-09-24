@@ -3,28 +3,49 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h1 class="text-2xl font-bold mt-6 mb-6 text-gray-800">Penguin avec filtre</h1>
-  <nav class="flex gap-6 justify-center mb-8">
-    <a href="/" class="font-semibold text-teal-500 hover:text-violet-900 underline decoration-teal-700 decoration-2">Accueil</a>
-    <a href="/simple-penguin" class="font-semibold text-teal-500 hover:text-violet-900 underline decoration-teal-700 decoration-2">Simple Penguin</a>
-    <a href="/penguin-filtre" class="font-semibold text-teal-500 hover:text-violet-900 underline decoration-teal-700 decoration-2">Penguin avec filtre</a>
-    <a href="/penguin-multi-filtre" class="font-semibold text-teal-500 hover:text-violet-900 underline decoration-teal-700 decoration-2">Penguin multi-filtres</a>
+  <h1>Penguin multi-filtres</h1>
+  
+  <nav style="margin-bottom: 2rem;">
+    <ul>
+      <li><a href="/">Accueil</a></li>
+      <li><a href="/simple-penguin">Simple Penguin</a></li>
+      <li><a href="/penguin-filtre">Penguin avec filtre</a></li>
+      <li><a href="/penguin-multi-filtre">Penguin multi-filtres</a></li>
+    </ul>
   </nav>
-  <div class="flex items-center gap-4 mb-8">
-    <label for="species" class="font-medium text-gray-700">Espèce :</label>
-    <select name="species" id="species" class="px-3 py-2 rounded border border-gray-300 bg-white text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200">
+
+  <div class="filters">
+    <label for="species">Espèce :</label>
+    <select name="species" id="species">
       <option value="">All species</option>
       <option value="Adelie">Adelie</option>
       <option value="Chinstrap">Chinstrap</option>
       <option value="Gentoo">Gentoo</option>
     </select>
+
+    <label for="island">Île :</label>
+    <select name="island" id="island">
+      <option value="">All islands</option>
+      <option value="Biscoe">Biscoe</option>
+      <option value="Dream">Dream</option>
+      <option value="Torgersen">Torgersen</option>
+    </select>
+
+    <label for="sex">Sexe :</label>
+    <select name="sex" id="sex">
+      <option value="">All sexes</option>
+      <option value="MALE">MALE</option>
+      <option value="FEMALE">FEMALE</option>
+    </select>
   </div>
 
-  <div id="plot" class="border rounded bg-gray-50 p-4 shadow"></div>
+  <div id="plot"></div>
 
   <script type="module">
     import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot/+esm";
     const selectSpecies = document.getElementById("species");
+    const selectIsland = document.getElementById("island");
+    const selectSex = document.getElementById("sex");
     const plotDiv = document.getElementById("plot");
 
     async function renderPlot() {
@@ -32,9 +53,14 @@ import Layout from "../layouts/Layout.astro";
       const penguins = await response.json();
 
       const species = selectSpecies.value;
-      const filtered = species
-        ? penguins.filter(p => p.species === species)
-        : penguins;
+      const island = selectIsland.value;
+      const sex = selectSex.value;
+
+      const filtered = penguins.filter(p =>
+        (species === "" || p.species === species) &&
+        (island === "" || p.island === island) &&
+        (sex === "" || p.sex === sex)
+      );
 
       plotDiv.innerHTML = "";
 
@@ -52,6 +78,8 @@ import Layout from "../layouts/Layout.astro";
     }
 
     selectSpecies.addEventListener("change", renderPlot);
+    selectIsland.addEventListener("change", renderPlot);
+    selectSex.addEventListener("change", renderPlot);
 
     renderPlot();
   </script>
@@ -70,19 +98,41 @@ import Layout from "../layouts/Layout.astro";
       margin-bottom: 2rem;
       text-shadow: 0 2px 8px #0001;
     }
-    .flex {
+    nav ul {
       display: flex;
-      align-items: center;
       gap: 1.5rem;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
       justify-content: center;
-      margin-bottom: 2rem;
     }
-    label {
+    nav a {
+      font-weight: 600;
+      color: #319795;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s, background 0.2s;
+      padding: 0.3em 0.7em;
+      border-radius: 4px;
+    }
+    nav a:hover {
+      color: #6d28d9;
+      background: #e6f2ff;
+    }
+    .filters {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filters label {
       font-weight: 600;
       color: #319795;
       margin-right: 0.5em;
     }
-    select {
+    .filters select {
       padding: 0.5em 1em;
       border-radius: 0.5em;
       border: 1px solid #81e6d9;
@@ -91,25 +141,9 @@ import Layout from "../layouts/Layout.astro";
       box-shadow: 0 2px 8px #0001;
       transition: border 0.2s;
     }
-    select:focus {
+    .filters select:focus {
       border-color: #319795;
       outline: none;
-    }
-    nav {
-      margin-bottom: 2rem;
-    }
-    nav a {
-      font-weight: 600;
-      color: #319795;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      transition: color 0.2s;
-      padding: 0.3em 0.7em;
-      border-radius: 4px;
-    }
-    nav a:hover {
-      color: #6d28d9;
-      background: #e6f2ff;
     }
     #plot {
       margin: 0 auto;
