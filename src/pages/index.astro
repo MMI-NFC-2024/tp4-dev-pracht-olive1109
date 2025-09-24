@@ -3,15 +3,28 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
-  
-  <nav>
-    <ul>
-      <li><a href="/">Accueil</a></li>
-      <li><a href="/simple-penguin">Simple Penguin</a></li>
-      <li><a href="/penguin-filtre">Penguin avec filtre</a></li>
-      <li><a href="/penguin-multi-filtre">Penguin multi-filtres</a></li>
-      <li><a href="/simple-diamonds">Simple diamonds</a></li>
-      <li><a href="/diamonds-filtre">Diamonds avec filtre</a></li>
-    </ul>
-  </nav>
+  <div class="index-bg min-h-screen flex flex-col items-center justify-center">
+    <h1 class="text-3xl font-bold mb-10 text-teal-900 text-center drop-shadow-lg">Test Astro et Plot (Observablehq)</h1>
+    <div class="flex gap-8">
+      <a href="/simple-penguin" class="px-8 py-4 rounded-lg bg-teal-500 text-white text-xl font-semibold shadow-lg hover:bg-teal-700 transition-all">Simple Penguin</a>
+      <a href="/simple-diamonds" class="px-8 py-4 rounded-lg bg-gray-700 text-white text-xl font-semibold shadow-lg hover:bg-gray-900 transition-all">Simple Diamonds</a>
+    </div>
+  </div>
+  <style>
+    .index-bg {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(to right, #e6fffa, #e5e7eb);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #134e4a;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 8px #0001;
+    }
+    a {
+      text-decoration: none;
+    }
+  </style>
+</Layout>
