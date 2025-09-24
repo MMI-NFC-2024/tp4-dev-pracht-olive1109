@@ -1,0 +1,41 @@
+---
+import PlotFigure from "../../components/PlotFigure.astro";
+import penguins from '../../assets/penguins.json';
+import * as Plot from "@observablehq/plot";
+const penguinsAdelie = penguins.filter(({species}) => species === "Adelie");
+---
+
+<h1>Adelie Penguins</h1>
+
+<p>Nombre d'individus : {penguinsAdelie.length}</p>
+
+<PlotFigure
+    options={{
+      marks: [
+        Plot.dot(penguinsAdelie, {
+          x: "culmen_length_mm",
+          y: "culmen_depth_mm",
+          stroke: "species",
+        }),
+      ],
+    }}
+/>
+
+<style>
+body, main {
+  background: linear-gradient(90deg, #f1f8fd);
+  min-height: 100vh;
+}
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #3866a3;
+}
+p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #2980b9;
+  margin-bottom: 1.2rem;
+}
+</style>

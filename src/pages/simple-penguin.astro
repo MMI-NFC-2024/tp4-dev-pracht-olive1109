@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
+  <div id="plot"></div>
+  <script type="module">
+    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot/+esm";
+    const plotDiv = document.getElementById("plot");
+
+    // Charge les données JSON côté client
+    const response = await fetch("/assets/penguins.json");
+    const penguins = await response.json();
+
+    const plot = Plot.plot({
+      marks: [
+        Plot.dot(penguins, {
+          x: "culmen_length_mm",
+          y: "culmen_depth_mm",
+          stroke: "species",
+        }),
+      ],
+    });
+
+    plotDiv.appendChild(plot);
+  </script>
+</Layout>

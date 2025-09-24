@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <h1>Penguin avec filtre</h1>
+  
+  <select name="species" id="species">
+    <option value="">All species</option>
+    <option value="Adelie">Adelie</option>
+    <option value="Chinstrap">Chinstrap</option>
+    <option value="Gentoo">Gentoo</option>
+  </select>
+
+  <div id="plot"></div>
+
+  <script type="module">
+    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot/+esm";
+    const selectSpecies = document.getElementById("species");
+    const plotDiv = document.getElementById("plot");
+
+    async function renderPlot() {
+      const response = await fetch("/assets/penguins.json");
+      const penguins = await response.json();
+
+      const species = selectSpecies.value;
+      const filtered = species
+        ? penguins.filter(p => p.species === species)
+        : penguins;
+
+      plotDiv.innerHTML = "";
+
+      const plot = Plot.plot({
+        marks: [
+          Plot.dot(filtered, {
+            x: "culmen_length_mm",
+            y: "culmen_depth_mm",
+            stroke: "species",
+          }),
+        ],
+      });
+
+      plotDiv.appendChild(plot);
+    }
+
+    selectSpecies.addEventListener("change", renderPlot);
+
+    renderPlot();
+  </script>
+</Layout>

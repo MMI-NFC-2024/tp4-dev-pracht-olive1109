@@ -1,0 +1,40 @@
+---
+import PlotFigure from "../../components/PlotFigure.astro";
+import penguins from '../../assets/penguins.json';
+import * as Plot from "@observablehq/plot";
+const penguinsChinstrap = penguins.filter(({species}) => species === "Chinstrap");
+---
+
+<h1>Manchots Chinstrap</h1>
+
+<p>Nombre d'individus : {penguinsChinstrap.length}</p>
+
+<PlotFigure
+    options={{
+      marks: [
+        Plot.barY(penguinsChinstrap, {
+          x: "sex",
+          y: "body_mass_g",
+          stroke: "species",
+        }),
+      ],
+    }}
+/>
+<style>
+body, main {
+  background: linear-gradient(90deg, #f1f8fd);
+  min-height: 100vh;
+}
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #386ea3;
+}
+p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #2980b9;
+  margin-bottom: 1.2rem;
+}
+</style>
